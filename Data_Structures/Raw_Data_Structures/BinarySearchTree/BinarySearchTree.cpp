@@ -234,7 +234,7 @@ void BinarySearchTree::MakeDeletion( TreeNode*& nodePtr )
 	}	
 }
 
-void BinarySearchTree::DeleteAndReLink( TreeNode*& nodePtr, TreeNode* branchToLink )
+void BinarySearchTree::DeleteAndReLink( TreeNode*& nodePtr, TreeNode*& branchToLink )
 {
 	TreeNode* tempNode = nullptr;
 	

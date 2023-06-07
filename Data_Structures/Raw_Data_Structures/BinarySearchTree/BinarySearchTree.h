@@ -31,7 +31,7 @@ class BinarySearchTree
 		void DisplayInOrder( TreeNode* ) const;
 		void DisplayPreOrder( TreeNode* ) const;
 		void DisplayPostOrder( TreeNode* ) const;
-		void DeleteAndReLink( TreeNode*&, TreeNode* );
+		void DeleteAndReLink( TreeNode*&, TreeNode*& );
 
 		TreeNode* ConstructBSTPreorder( std::vector<int>&, int, int, std::vector<int>&, int, int, std::unordered_map<int, int>& );
 		TreeNode* ConstructBSTPostorder( std::vector<int>&, int, int, std::vector<int>&, int, int, std::unordered_map<int, int>& );
