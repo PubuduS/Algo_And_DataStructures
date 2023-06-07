@@ -24,19 +24,19 @@ class BinarySearchTree
 		int m_NoOfElems;
 		int m_NoOfNodes;
 
-		void Insert( TreeNode*&, TreeNode*&  );
-		void DestroySubTree( TreeNode* );
-		void DeleteNode( const int&, TreeNode*& );
-		void MakeDeletion( TreeNode*& );
-		void DisplayInOrder( TreeNode* ) const;
-		void DisplayPreOrder( TreeNode* ) const;
-		void DisplayPostOrder( TreeNode* ) const;
-		void DeleteAndReLink( TreeNode*&, TreeNode*& );
+		void Insert( TreeNode*& nodePtr, TreeNode*& newNode  );
+		void DestroySubTree( TreeNode* nodePtr );
+		void DeleteNode( const int& value, TreeNode*& nodePtr );
+		void MakeDeletion( TreeNode*& nodePtr );
+		void DisplayInOrder( TreeNode* nodePtr ) const;
+		void DisplayPreOrder( TreeNode* nodePtr ) const;
+		void DisplayPostOrder( TreeNode* nodePtr ) const;
+		void DeleteAndReLink( TreeNode*& nodePtr, TreeNode*& branchToLink );
 
-		TreeNode* ConstructBSTPreorder( std::vector<int>&, int, int, std::vector<int>&, int, int, std::unordered_map<int, int>& );
-		TreeNode* ConstructBSTPostorder( std::vector<int>&, int, int, std::vector<int>&, int, int, std::unordered_map<int, int>& );
+		TreeNode* ConstructBSTPreorder( std::vector<int>& preorder, int preStart, int preEnd, std::vector<int>& inorder, int inStart, int inEnd, std::unordered_map<int, int>& map );
+		TreeNode* ConstructBSTPostorder( std::vector<int>& postorder, int postStart, int postEnd, std::vector<int>& inorder, int inStart, int inEnd, std::unordered_map<int, int>& map );
 
-		bool CheckBSTConstructionConditions( std::vector<int>&, std::vector<int>& );
+		bool CheckBSTConstructionConditions( std::vector<int>& preorder, std::vector<int>& inorder );
 
 	public:
 		// Constructor
@@ -53,35 +53,39 @@ class BinarySearchTree
 			POSTORDER = 2
 		};
 
-		void InsertNode( const int& );		
-		void RemoveNode( const int& );		
-		void MirrorTree( TreeNode* );
+		void InsertNode( const int& value );		
+		void RemoveNode( const int& value );
+		void MirrorTree( TreeNode* nodePtr );
 		void ConstructBST( std::vector<int>& );
 		void ConstructBST( std::vector<int>&, std::vector<int>&, bool isPreOrder = true );
 		void Display( const BinarySearchTree::OrderFlag flag = OrderFlag::INORDER ) const;
 
-		bool SearchNode( const int& );
-		bool IsEmpty() const;
+		bool SearchNode( const int& numbers );
+		
+		bool IsEmpty() const
+		{
+			return m_Root == nullptr;
+		}
 
-		int GetDepth( TreeNode* );
+		int GetDepth( TreeNode* nodePtr );
 		int GetMiniElement() const;
 		int GetMaxElement() const;
 
-		TreeNode* DeepCopy( TreeNode* );
-		const TreeNode* GetMaxNode( TreeNode* ) const;
-		const TreeNode* GetMinNode( TreeNode* ) const;
+		TreeNode* DeepCopy( TreeNode* rhs );
+		const TreeNode* GetMaxNode( TreeNode* nodePtr ) const;
+		const TreeNode* GetMinNode( TreeNode* nodePtr ) const;
 
-		inline TreeNode* GetRoot() const
+		TreeNode* GetRoot() const
 		{
 			return m_Root;
 		}
 
-		inline int GetNoOfElements() const
+		int GetNoOfElements() const
 		{
 			return m_NoOfElems;
 		}
 
-		inline int GetNoOfNodes() const
+		int GetNoOfNodes() const
 		{
 			return m_NoOfNodes;
 		}			

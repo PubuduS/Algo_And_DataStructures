@@ -29,9 +29,7 @@ std::unique_ptr<BinarySearchTree::TreeNode> BinarySearchTree::DeepCopy( BinarySe
 }
 
 BinarySearchTree::~BinarySearchTree()
-{	
-	m_NoOfElems = 0;
-	m_NoOfNodes = 0;
+{
 	cout << "---- Done Destroying Tree ----" << endl;
 }
 
@@ -60,16 +58,6 @@ void BinarySearchTree::Insert( std::unique_ptr<TreeNode>& nodePtr, std::unique_p
 		nodePtr->count++;
 		m_NoOfElems++;
 	}	
-}
-
-bool BinarySearchTree::IsEmpty() const
-{
-	if( m_Root == nullptr )
-	{
-		return true;
-	}
-
-	return false;
 }
 
 void BinarySearchTree::Display( const BinarySearchTree::OrderFlag flag ) const
@@ -186,8 +174,6 @@ void BinarySearchTree::DeleteNode( const int& value, std::unique_ptr<TreeNode>& 
 
 void BinarySearchTree::MakeDeletion( std::unique_ptr<TreeNode>& nodePtr )
 {
-	TreeNode* tempNode = nullptr;
-
 	if( nodePtr == nullptr )
 	{
 		cout << "Cannot Delete an Empty Node." << endl;
@@ -209,6 +195,8 @@ void BinarySearchTree::MakeDeletion( std::unique_ptr<TreeNode>& nodePtr )
 			m_NoOfElems--;
 			return;
 		}
+
+		TreeNode* tempNode = nullptr;
 
 		// Move one down to the right
 		tempNode = nodePtr->right.get();
@@ -232,8 +220,6 @@ void BinarySearchTree::MakeDeletion( std::unique_ptr<TreeNode>& nodePtr )
 
 void BinarySearchTree::DeleteAndReLink( std::unique_ptr<TreeNode>& nodePtr, std::unique_ptr<TreeNode>& branchToLink )
 {
-	std::unique_ptr<TreeNode> tempNode = nullptr;
-	
 	m_NoOfElems--;
 
 	if( nodePtr->count > 1 )
@@ -242,7 +228,7 @@ void BinarySearchTree::DeleteAndReLink( std::unique_ptr<TreeNode>& nodePtr, std:
 		return;
 	}
 
-	tempNode = std::move( nodePtr );
+	auto tempNode = std::move( nodePtr );	
 	nodePtr = std::move( branchToLink );
 	m_NoOfNodes--;
 }
@@ -331,9 +317,7 @@ void BinarySearchTree::MirrorTree( TreeNode* nodePtr )
 	MirrorTree( nodePtr->left.get() );
 	MirrorTree( nodePtr->right.get() );
 
-	temp = std::move( nodePtr->left );
-	nodePtr->left = std::move( nodePtr->right );
-	nodePtr->right = std::move( temp );
+	std::swap( nodePtr->left, nodePtr->right );
 }
 
 void BinarySearchTree::ConstructBST( std::vector<int>& numbers )
@@ -385,7 +369,7 @@ std::unique_ptr<BinarySearchTree::TreeNode> BinarySearchTree::ConstructBSTPreord
 		return nullptr;
 	}
 
-	std::unique_ptr<BinarySearchTree::TreeNode> root = std::make_unique<BinarySearchTree::TreeNode>( preorder[preStart] );
+	auto root = std::make_unique<BinarySearchTree::TreeNode>( preorder[preStart] );
 	int mid = map[root->value];
 	int numLeft = mid - inStart;
 
@@ -403,7 +387,7 @@ std::unique_ptr<BinarySearchTree::TreeNode> BinarySearchTree::ConstructBSTPostor
 		return nullptr;
 	}
 
-	std::unique_ptr<BinarySearchTree::TreeNode> root = std::make_unique<BinarySearchTree::TreeNode>( postorder[postEnd] );
+	auto root = std::make_unique<BinarySearchTree::TreeNode>( postorder[postEnd] );
 	int mid = map[root->value];
 	int numLeft = mid - inStart;
 
@@ -416,16 +400,15 @@ std::unique_ptr<BinarySearchTree::TreeNode> BinarySearchTree::ConstructBSTPostor
 bool BinarySearchTree::CheckBSTConstructionConditions( std::vector<int>& preorder, std::vector<int>& inorder )
 {
 	const int preorderLen = preorder.size();
-	const int inorderLen = inorder.size();
-
-	std::unordered_map<int, int> hashMap;
-	std::unordered_set<int> uniqueMap;
+	const int inorderLen = inorder.size();	
 
 	if( preorderLen != inorderLen )
 	{
 		cout << "length of both vectors must be same" << endl;
 		return false;
 	}
+
+	std::unordered_set<int> uniqueMap;
 
 	// check whether the vectors have unique values or not
 	for( int i = 0; i < inorderLen; ++i )
@@ -439,6 +422,8 @@ bool BinarySearchTree::CheckBSTConstructionConditions( std::vector<int>& preorde
 			return false;
 		}
 	}
+
+	std::unordered_map<int, int> hashMap;
 
 	// Check to see both vectors have same value or not
 	for( int i = 0; i < inorderLen; ++i )
@@ -463,18 +448,13 @@ BinarySearchTree& BinarySearchTree::operator=( const BinarySearchTree& rhs )
 	// Prevent self assignment
 	if( this != &rhs )
 	{
-		if( this->m_Root != nullptr )
+		if( rhs.m_Root != nullptr )
 		{
-			this->m_Root.reset();
-		}
-
-		if( rhs.m_Root == nullptr )
-		{
-			this->m_Root.reset();
+			this->m_Root = DeepCopy( rhs.GetRoot() );
 		}
 		else
 		{
-			this->m_Root = DeepCopy( rhs.GetRoot() );
+			this->m_Root.reset();
 		}
 	}
 	return *this;

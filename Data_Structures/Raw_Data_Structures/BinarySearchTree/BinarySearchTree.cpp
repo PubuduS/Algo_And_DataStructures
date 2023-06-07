@@ -33,8 +33,6 @@ BinarySearchTree::~BinarySearchTree()
 	cout << "---- Destroying Tree ----" << endl;
 	DestroySubTree( m_Root );
 	m_Root = nullptr;
-	m_NoOfElems = 0;
-	m_NoOfNodes = 0;
 	Display( OrderFlag::INORDER );
 	cout << "---- Done Destroying Tree ----" << endl;
 }
@@ -64,16 +62,6 @@ void BinarySearchTree::Insert( TreeNode*& nodePtr, TreeNode*& newNode )
 		nodePtr->count++;
 		m_NoOfElems++;
 	}	
-}
-
-bool BinarySearchTree::IsEmpty() const
-{
-	if( m_Root == nullptr )
-	{
-		return true;
-	}
-
-	return false;
 }
 
 void BinarySearchTree::Display( const BinarySearchTree::OrderFlag flag ) const
@@ -329,9 +317,7 @@ void BinarySearchTree::MirrorTree( TreeNode* nodePtr )
 	MirrorTree( nodePtr->left );
 	MirrorTree( nodePtr->right );
 
-	temp = nodePtr->left;
-	nodePtr->left = nodePtr->right;
-	nodePtr->right = temp;
+	std::swap( nodePtr->left, nodePtr->right );
 }
 
 void BinarySearchTree::ConstructBST( std::vector<int>& numbers )
