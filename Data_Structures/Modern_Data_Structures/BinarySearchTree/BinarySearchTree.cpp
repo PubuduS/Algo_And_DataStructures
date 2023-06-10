@@ -28,9 +28,10 @@ std::unique_ptr<BinarySearchTree::TreeNode> BinarySearchTree::DeepCopy( BinarySe
 	return newNode;
 }
 
-BinarySearchTree::~BinarySearchTree()
+BinarySearchTree::BinarySearchTree( BinarySearchTree&& other ) noexcept : m_Root( std::move( other.m_Root ) ), m_NoOfElems( other.m_NoOfElems ), m_NoOfNodes( other.m_NoOfNodes )
 {
-	cout << "---- Done Destroying Tree ----" << endl;
+	other.m_NoOfElems = 0;
+	other.m_NoOfNodes = 0;
 }
 
 void BinarySearchTree::InsertNode( const int& value )
@@ -457,5 +458,16 @@ BinarySearchTree& BinarySearchTree::operator=( const BinarySearchTree& rhs )
 			this->m_Root.reset();
 		}
 	}
+	return *this;
+}
+
+BinarySearchTree& BinarySearchTree::operator=( BinarySearchTree&& rhs ) noexcept
+{
+	m_NoOfElems = rhs.m_NoOfElems;
+	m_NoOfNodes = rhs.m_NoOfNodes;
+	m_Root = std::move( rhs.m_Root );
+	rhs.m_NoOfElems = 0;
+	rhs.m_NoOfNodes = 0;
+
 	return *this;
 }

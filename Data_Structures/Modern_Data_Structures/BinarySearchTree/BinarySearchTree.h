@@ -40,14 +40,21 @@ class BinarySearchTree
 		bool CheckBSTConstructionConditions( std::vector<int>& preorder, std::vector<int>& inorder);
 
 	public:
-		// Constructor
+		// Constructors
 		BinarySearchTree();
 		BinarySearchTree( const BinarySearchTree& other );
 
+		// Move Constructor
+		BinarySearchTree( BinarySearchTree&& other ) noexcept;
+
+		// = Operator overload for deep copy
 		BinarySearchTree& operator=( const BinarySearchTree& rhs );
 
+		// = Operator overload for move schemantic
+		BinarySearchTree& operator=( BinarySearchTree&& rhs ) noexcept;
+
 		// Destructor
-		~BinarySearchTree();
+		~BinarySearchTree() = default;
 
 		const enum class OrderFlag
 		{

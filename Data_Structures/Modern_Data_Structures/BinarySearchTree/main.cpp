@@ -19,6 +19,7 @@ int main()
 	BinarySearchTree myBST1;
 	myBST1.InsertNode( 32 );
 	myBST1.InsertNode( 48 );
+	myBST1.InsertNode( 48 );
 	myBST1.InsertNode( 12 );
 	myBST1.InsertNode( 8) ;
 	myBST1.InsertNode( 16 );
@@ -43,6 +44,14 @@ int main()
 	//myBST4.ConstructBST( preorder, inorder, true );
 	myBST4.ConstructBST(postorder, inorder, false);
 	myBST4.Display();
+
+	std::cout << "------Start Moving -------" << std::endl;
+	BinarySearchTree myBST5( std::move( myBST1 ) );
+	myBST5.Display();	
+
+	std::cout << "------Start Moving using = -------" << std::endl;
+	BinarySearchTree myBST6 = std::move( myBST5 );	
+	myBST6.Display();
 
 	return 0;
 }
