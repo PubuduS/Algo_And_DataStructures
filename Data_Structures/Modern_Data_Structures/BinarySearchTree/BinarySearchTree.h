@@ -56,7 +56,7 @@ class BinarySearchTree
 		// Destructor
 		~BinarySearchTree() = default;
 
-		const enum class OrderFlag
+		enum class OrderFlag
 		{
 			INORDER = 0,
 			PREORDER = 1,
