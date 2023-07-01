@@ -35,8 +35,10 @@
   <ItemGroup>
     <ClInclude Include="ModernBST.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SLinkedList.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SLinkedList.cpp" />
     <ClCompile Include="TestModernBST.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

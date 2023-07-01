@@ -27,7 +27,7 @@ private:
 	ListNode* m_Tail;
 		
 	void AddToNodeMap( const int& key, ListNode* currentNode, ListNode* previousNode );
-
+	ListNode* DeepCopy( ListNode* rhsPtr );
 
 public:
 	SingleLinkedList();
@@ -42,11 +42,11 @@ public:
 	void PrintList() const;
 	void MakeEmpty();	
 	void RecursivePrint( ListNode* currentNode, int i ) const;
+	void PrintMap() const;
 
-	ListNode* LinearSearchNode( const int& value, ListNode*& nodePtr ) const;
+	ListNode* LinearSearchNode( const int& value ) const;
 	ListNode* DirectSearchNode( const int& value ) const;	
-	ListNode* FindMiddleOrLastNode( const bool getMiddle = true );
-	ListNode* DeepCopy( ListNode* rhsPtr );
+	ListNode* FindMiddleOrLastNode( const bool getMiddle = true );	
 
 	SingleLinkedList& operator=( const SingleLinkedList& rhs );
 
@@ -58,6 +58,11 @@ public:
 	int GetElementCount() const
 	{
 		return m_ElementCount;
+	}
+
+	int GetNodeMapSize() const
+	{
+		return m_NodeMap.size();
 	}
 
 	bool IsListEven() const
@@ -79,10 +84,6 @@ public:
 	{
 		return m_Tail;
 	}
-
-	void PrintMap() const;
-
-
 };
 
 #endif // !SINGLELINKEDLIST_H

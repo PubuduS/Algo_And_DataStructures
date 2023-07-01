@@ -25,7 +25,7 @@ int main()
 	std::cout << "After delete" << std::endl;
 	myObj2.PrintList();
 		
-	std::cout << myObj2.DirectSearchNode(6)->value << std::endl;
+	std::cout << myObj2.DirectSearchNode(6)->value << std::endl;	
 	myObj.PrintList();
 	std::cout << myObj2.GetTail()->value << std::endl;
 }

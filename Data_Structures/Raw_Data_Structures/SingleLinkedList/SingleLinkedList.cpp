@@ -15,8 +15,7 @@ SingleLinkedList::SingleLinkedList( const SingleLinkedList& rhs ) : m_NodeCount(
 
 SingleLinkedList::~SingleLinkedList()
 {	
-	MakeEmpty();
-	cout << "List Destroyed" << endl;
+	MakeEmpty();	
 }
 
 SingleLinkedList::ListNode* SingleLinkedList::DeepCopy( ListNode* rhsPtr )
@@ -210,7 +209,7 @@ void SingleLinkedList::RecursivePrint( ListNode* currentNode, int i ) const
 
 	if( i == 1 )
 	{
-		cout << "NULL " << endl;
+		cout << "NULL" << endl;
 	}
 }
 
@@ -224,6 +223,11 @@ void SingleLinkedList::AddToNodeMap( const int& key, ListNode* currentNode, List
 
 void SingleLinkedList::PrintMap() const
 {
+	if( m_NodeMap.empty() == true )
+	{
+		return;
+	}
+
 	for( auto& element : m_NodeMap )
 	{
 		cout << element.first << " " << element.second[0]<< " prev " << element.second[1] << endl;
@@ -244,23 +248,23 @@ SingleLinkedList::ListNode* SingleLinkedList::DirectSearchNode( const int& value
 
 // Return a pointer to the node of the value
 // and return previous pointer. If not found both values will be nullptr. Takes O(N) time.
-SingleLinkedList::ListNode* SingleLinkedList::LinearSearchNode( const int& value, ListNode*& previousNode ) const
+SingleLinkedList::ListNode* SingleLinkedList::LinearSearchNode( const int& value ) const
 {
+	ListNode* previousNode = nullptr;
+
 	if( IsEmpty() == true )
 	{
-		cout << "Nothing to search. List is empty" << endl;
-		previousNode = nullptr;
+		cout << "Nothing to search. List is empty" << endl;		
 		return previousNode;
 	}
 
-	ListNode* currentNode = m_Head;
-	previousNode = nullptr;
+	ListNode* currentNode = m_Head;	
 
 	while( currentNode != nullptr )
 	{
 		if( currentNode->value == value )
 		{
-			return currentNode;
+			return previousNode;
 		}
 		previousNode = currentNode;
 		currentNode = currentNode->next;
@@ -281,6 +285,11 @@ void SingleLinkedList::DeleteNode( const int& value )
 
 	if( m_Head->value == value && m_Head->count == 1 )
 	{
+		if( m_Head == m_Tail )
+		{
+			m_Tail = nullptr;
+		}
+		
 		currentNode = m_Head->next;
 		delete m_Head;
 		m_Head = currentNode;
@@ -306,12 +315,13 @@ void SingleLinkedList::DeleteNode( const int& value )
 		previousNode->next = nullptr;
 		m_NodeMap.erase( m_NodeMap.find( value ) );
 		m_Tail = previousNode;
+		--m_NodeCount;
 		return;
 	}
 	else if( m_Tail->value == value && m_Tail->count > 1 )
 	{
 		--m_Tail->count;
-		--m_ElementCount;
+		--m_ElementCount;		
 		return;
 	}
 
@@ -329,6 +339,7 @@ void SingleLinkedList::DeleteNode( const int& value )
 	else if( currentNode != nullptr && currentNode->count > 1 )
 	{
 		--m_ElementCount;
+		--currentNode->count;
 	}
 
 }
@@ -448,5 +459,5 @@ SingleLinkedList& SingleLinkedList::operator=( const SingleLinkedList& rhs )
 		}
 	}
 
-	return* this;
+	return *this;
 }
