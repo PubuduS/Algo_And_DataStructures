@@ -16,4 +16,8 @@ jobs:
     - name: make
       run: make
     - name: Run Test
-      run: ./TestModernBST
+      run: |
+        echo "${Green}Running Modern BST Test Cases"
+        ./TestModernBST
+        echo "${Green}Running Raw LinkedList Test Cases"
+        ./SLinkedList
