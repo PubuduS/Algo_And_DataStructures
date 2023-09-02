@@ -13,6 +13,68 @@ SingleLinkedList::SingleLinkedList( const SingleLinkedList& rhs ) : m_NodeCount(
 {
 }
 
+// Move Constructor
+SingleLinkedList::SingleLinkedList( SingleLinkedList&& rhs ) noexcept : m_NodeCount( 0 ), m_ElementCount( 0 ), 
+                                                                        m_Head( nullptr ), m_Tail( nullptr )
+{
+	*this = std::move( rhs );
+}
+
+// Copy Operator Overload
+SingleLinkedList& SingleLinkedList::operator=( const SingleLinkedList& rhs )
+{
+	// prevent self assignment obj1 = obj1
+	if( this != &rhs )
+	{
+		if( this->m_Head != nullptr )
+		{
+			MakeEmpty();
+		}
+
+		if( rhs.IsEmpty() == true )
+		{
+			this->m_Head = nullptr;
+		}
+		else
+		{
+			this->m_Head = DeepCopy( rhs.GetHead() );
+			this->m_ElementCount = rhs.m_ElementCount;
+			this->m_NodeCount = rhs.m_NodeCount;
+		}
+	}
+
+	return *this;
+}
+
+SingleLinkedList& SingleLinkedList::operator=( SingleLinkedList&& rhs ) noexcept
+{
+	// Prevent Self Assignment
+	// Prevent this -> DoubleLinkedList myObj = myObj;
+	if( this != &rhs )
+	{
+		// If we have lvalue we destroy it.
+		if( this->IsEmpty() == false )
+		{
+			this->MakeEmpty();
+		}
+
+		this->m_Head = rhs.m_Head;
+		this->m_Tail = rhs.m_Tail;
+		this->m_ElementCount = rhs.m_ElementCount;
+		this->m_NodeCount = rhs.m_NodeCount;
+		this->m_NodeMap = std::move( rhs.m_NodeMap );
+
+		// Clean up
+		rhs.m_Head = nullptr;
+		rhs.m_Tail = nullptr;
+		rhs.m_ElementCount = 0;
+		rhs.m_NodeCount = 0;
+		rhs.m_NodeMap.clear();
+	}
+
+	return *this;
+}
+
 SingleLinkedList::~SingleLinkedList()
 {	
 	MakeEmpty();	
@@ -293,7 +355,7 @@ void SingleLinkedList::DeleteNode( const int& value )
 		currentNode = m_Head->next;
 		delete m_Head;
 		m_Head = currentNode;
-		m_NodeMap.erase( m_NodeMap.find( value ) );
+		m_NodeMap.erase( value );
 		--m_NodeCount;
 		--m_ElementCount;
 		return;
@@ -313,7 +375,7 @@ void SingleLinkedList::DeleteNode( const int& value )
 	{
 		delete m_Tail;
 		previousNode->next = nullptr;
-		m_NodeMap.erase( m_NodeMap.find( value ) );
+		m_NodeMap.erase( value );
 		m_Tail = previousNode;
 		--m_NodeCount;
 		return;
@@ -330,7 +392,7 @@ void SingleLinkedList::DeleteNode( const int& value )
 		ListNode* tempNode = currentNode->next;
 		
 		AddToNodeMap( tempNode->value, tempNode, previousNode );
-		m_NodeMap.erase( m_NodeMap.find( value ) );
+		m_NodeMap.erase( value );
 		delete currentNode;
 		--m_NodeCount;
 		--m_ElementCount;			
@@ -439,25 +501,80 @@ void SingleLinkedList::MakeEmpty()
 	m_Tail = nullptr;
 }
 
-SingleLinkedList& SingleLinkedList::operator=( const SingleLinkedList& rhs )
+// Prefix increment
+// If list is empty add 0 as the first node
+// Otherwise, add a newNode with ( head->value - 1 ) and change the head to newNode
+// Ex: if we have folloing list 1 -> 2 -> 3
+// This will result 0 -> 1 -> 2 -> 3 ( Head is now 0 )
+SingleLinkedList& SingleLinkedList::operator++()
 {
-	// prevent self assignment obj1 = obj1
-	if( this != &rhs )
+	if( IsEmpty() == true )
 	{
-		if( this->m_Head != nullptr )
-		{
-			MakeEmpty();
-		}
-
-		if( rhs.IsEmpty() == true )
-		{
-			this->m_Head = nullptr;
-		}
-		else
-		{
-			this->m_Head = DeepCopy( rhs.GetHead() );
-		}
+		InsertNode( 0 );
+		return *this;
 	}
 
+	InsertNode( m_Head->value - 1 );
 	return *this;
+}
+
+// Prefix decrement
+// If list is empty do nothing
+// Otherwise, delete a current headnode and update the head to the next node
+// Ex: if we have folloing list 1 -> 2 -> 3
+// This will result 2 -> 3 ( Head is now at 2 )
+SingleLinkedList& SingleLinkedList::operator--()
+{
+	if( IsEmpty() == true )
+	{
+		return *this;
+	}
+
+	DeleteNode( m_Head->value );
+	
+	return *this;
+}
+
+// Postfix increment
+// If list is empty add 0 as the first node
+// Otherwise, add a newNode with ( tail->value + 1 ) and change the tail to newNode
+// Ex: if we have folloing list 1 -> 2 -> 3
+// This will result 1 -> 2 -> 3 -> 4 ( Tail is now at 4 )
+SingleLinkedList SingleLinkedList::operator++( int )
+{
+	SingleLinkedList temp;
+
+	if( IsEmpty() == true )
+	{
+		temp.InsertNode( 0 );
+		InsertNode( 0 );
+		return temp;
+	}
+
+	temp.InsertNode( m_Tail->value );
+	InsertNode( m_Tail->value + 1 );
+	return temp;
+}
+
+// Postfix decrement
+// If list is empty do nothing
+// Otherwise, delete tail node and change the tail to one before it.
+// Ex: if we have folloing list 1 -> 2 -> 3
+// This will result 1 -> 2 ( Tail is now at 2 )
+SingleLinkedList SingleLinkedList::operator--( int )
+{
+	SingleLinkedList temp;
+
+	if( IsEmpty() == true )
+	{
+		return temp;
+	}
+
+	ListNode* previousNode = this->DirectSearchNode( m_Tail->value );
+
+	temp.InsertNode( previousNode->value );
+	temp.InsertNode( m_Tail->value );
+	temp.DeleteNode( m_Tail->value );
+	DeleteNode( m_Tail->value );
+	return temp;
 }

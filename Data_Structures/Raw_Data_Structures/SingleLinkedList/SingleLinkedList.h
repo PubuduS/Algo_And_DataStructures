@@ -32,6 +32,7 @@ private:
 public:
 	SingleLinkedList();
 	SingleLinkedList( const SingleLinkedList& rhs );
+	SingleLinkedList( SingleLinkedList&& rhs ) noexcept;
 	~SingleLinkedList();
 
 	void InsertNode( const int& value );
@@ -48,7 +49,18 @@ public:
 	ListNode* DirectSearchNode( const int& value ) const;	
 	ListNode* FindMiddleOrLastNode( const bool getMiddle = true );	
 
+
+	// Operator overloads
 	SingleLinkedList& operator=( const SingleLinkedList& rhs );
+	SingleLinkedList& operator=( SingleLinkedList&& rhs ) noexcept;
+
+	// Prefix
+	SingleLinkedList& operator++();
+	SingleLinkedList& operator--();
+
+	// Postfix
+	SingleLinkedList operator++(int);
+	SingleLinkedList operator--(int);
 
 	int GetNodeCount() const
 	{

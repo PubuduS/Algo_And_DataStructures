@@ -218,4 +218,144 @@ TEST_F( SLinkedList, CheckCopyAssignmentOperator )
 	EXPECT_EQ( expected, output );
 }
 
+// Move constructor also use move assignment. Therefore, we can check both with this test case
+TEST_F( SLinkedList, CheckMoveConstructor )
+{
+	std::vector<int> valueList{ 5, 13, 98, 657, 3, 4, 5, 89, 44, 7, 11, 21, 21, 14, 61, 456, 31, 27, 56, 0 };
+	SingleLinkedList myObj1;
+	myObj1.InsertMultipleNodes( valueList );
+
+	SingleLinkedList myObj2 = std::move( myObj1 );
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+	EXPECT_EQ( expected, "List is empty!\n" );
+
+	testing::internal::CaptureStdout();
+	myObj2.PrintList();
+	expected = testing::internal::GetCapturedStdout();
+	EXPECT_EQ( expected, "Head -> 0 ( 1 ) -> 3 ( 1 ) -> 4 ( 1 ) -> 5 ( 2 ) -> 7 ( 1 ) -> 11 ( 1 ) -> 13 ( 1 ) -> 14 ( 1 ) -> 21 ( 2 ) -> 27 ( 1 ) -> 31 ( 1 ) -> 44 ( 1 ) -> 56 ( 1 ) -> 61 ( 1 ) -> 89 ( 1 ) -> 98 ( 1 ) -> 456 ( 1 ) -> 657 ( 1 ) -> NULL\n" );
+}
+
+TEST_F( SLinkedList, CheckPrefixIncrementOnEmptyList )
+{
+	SingleLinkedList myObj1;
+	++myObj1;
+	++myObj1;
+	++myObj1;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ( expected, "Head -> -2 ( 1 ) -> -1 ( 1 ) -> 0 ( 1 ) -> NULL\n" );
+}
+
+TEST_F( SLinkedList, CheckPrefixIncrementOnList )
+{
+	std::vector<int> valueList{ 4, 2, 3, 1 };
+	SingleLinkedList myObj1;
+	myObj1.InsertMultipleNodes( valueList );
+
+	++myObj1;
+	++myObj1;
+	++myObj1;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ( expected, "Head -> -2 ( 1 ) -> -1 ( 1 ) -> 0 ( 1 ) -> 1 ( 1 ) -> 2 ( 1 ) -> 3 ( 1 ) -> 4 ( 1 ) -> NULL\n" );
+}
+
+TEST_F( SLinkedList, CheckPrefixDecrementOnEmptyList )
+{
+	SingleLinkedList myObj1;
+	--myObj1;
+	--myObj1;
+	--myObj1;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ( expected, "List is empty!\n" );
+}
+
+TEST_F( SLinkedList, CheckPrefixDecrementOnList )
+{
+	std::vector<int> valueList{ 4, 2, 3, 1 };
+	SingleLinkedList myObj1;
+	myObj1.InsertMultipleNodes( valueList );
+
+	--myObj1;
+	--myObj1;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ( expected, "Head -> 3 ( 1 ) -> 4 ( 1 ) -> NULL\n" );
+}
+
+TEST_F( SLinkedList, CheckPostfixIncrementOnEmptyList )
+{
+	SingleLinkedList myObj1;
+	myObj1++;
+	myObj1++;
+	myObj1++;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ(expected, "Head -> 0 ( 1 ) -> 1 ( 1 ) -> 2 ( 1 ) -> NULL\n");
+}
+
+TEST_F( SLinkedList, CheckPostfixIncrementOnList )
+{
+	std::vector<int> valueList{ 4, 2, 3, 1 };
+	SingleLinkedList myObj1;
+	myObj1.InsertMultipleNodes( valueList );
+
+	myObj1++;
+	myObj1++;
+	myObj1++;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ( expected, "Head -> 1 ( 1 ) -> 2 ( 1 ) -> 3 ( 1 ) -> 4 ( 1 ) -> 5 ( 1 ) -> 6 ( 1 ) -> 7 ( 1 ) -> NULL\n" );
+}
+
+TEST_F( SLinkedList, CheckPostfixDecrementOnEmptyList )
+{
+	SingleLinkedList myObj1;
+	myObj1--;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ( expected, "List is empty!\n" );
+}
+
+TEST_F( SLinkedList, CheckPostfixDecrementOnList )
+{
+	std::vector<int> valueList{ 4, 2, 3, 1 };
+	SingleLinkedList myObj1;
+	myObj1.InsertMultipleNodes( valueList );
+
+	myObj1--;
+	myObj1--;
+
+	testing::internal::CaptureStdout();
+	myObj1.PrintList();
+	std::string expected = testing::internal::GetCapturedStdout();
+
+	EXPECT_EQ(expected, "Head -> 1 ( 1 ) -> 2 ( 1 ) -> NULL\n");
+}
+
 
